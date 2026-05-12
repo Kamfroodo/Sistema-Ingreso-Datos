@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesion - Sistema de Ingreso de Datos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e272e 0%, #2c3e50 100%);
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box .logo-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        .login-box h2 {
+            color: #1e272e;
+            margin-bottom: 8px;
+            font-size: 22px;
+        }
+        .login-box .subtitle {
+            color: #636e72;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .login-box .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .login-box .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .login-box .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .login-box .form-group input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        .login-box .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .login-box .btn-login:hover {
+            background: #1557b0;
+            transform: translateY(-1px);
+        }
+        .login-error {
+            color: #e63946;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+        .login-error.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo-icon">🛡️</div>
+            <h2>INGRESO DE DATOS</h2>
+            <p class="subtitle">Sistema de Gestion de Confianza</p>
+
+            <form id="form-login">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="login-usuario" placeholder="Ingrese usuario" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" placeholder="Ingrese contraseña" required>
+                </div>
+                <button type="submit" class="btn-login">🔐 Ingresar al Sistema</button>
+                <div id="login-error" class="login-error">Usuario o contraseña incorrectos</div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Credenciales predefinidas
+        const USUARIO_CORRECTO = 'SECCION I';
+        const PASSWORD_CORRECTO = 'SECCI2026';
+
+        document.getElementById('form-login').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const usuario = document.getElementById('login-usuario').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (usuario === USUARIO_CORRECTO && password === PASSWORD_CORRECTO) {
+                // Guardar sesion en sessionStorage
+                sessionStorage.setItem('sesion_activa', 'true');
+                sessionStorage.setItem('usuario', usuario);
+                // Redirigir al sistema
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('login-error').classList.add('active');
+                // Limpiar contraseña
+                document.getElementById('login-password').value = '';
+            }
+        });
+    </script>
+</body>
+</html>

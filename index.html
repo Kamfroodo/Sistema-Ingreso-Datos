@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ingreso de Datos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <script>
+        // Proteccion: redirigir a login si no hay sesion activa
+        if (!sessionStorage.getItem('sesion_activa')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>INGRESO DE DATOS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-section="ingreso">
+                    <span class="icon">📝</span> Ingreso
+                </li>
+                <li class="nav-item" data-section="consultas">
+                    <span class="icon">🔍</span> Consultas
+                </li>
+                <li class="nav-item" data-section="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </li>
+                <li class="nav-item" data-section="graficos">
+                    <span class="icon">📈</span> Graficos
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-export" onclick="exportarExcel()">📥 Exportar Excel</button>
+                </div>
+            </header>
+
+            <!-- SECCION: DASHBOARD -->
+            <section id="dashboard" class="section active">
+                <div class="cards-grid">
+                    <div class="card stat-card alta">
+                        <div class="stat-icon">🛡️</div>
+                        <div class="stat-info">
+                            <h3 id="total-alta">0</h3>
+                            <p>Total Alta Confianza</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card media">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-info">
+                            <h3 id="total-media">0</h3>
+                            <p>Total Media Confianza</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card baja">
+                        <div class="stat-icon">🔒</div>
+                        <div class="stat-info">
+                            <h3 id="total-baja">0</h3>
+                            <p>Total Baja Confianza</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card total">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <h3 id="total-registros">0</h3>
+                            <p>Total Registros</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="card chart-card">
+                        <h3>Distribucion por Nivel de Confianza</h3>
+                        <canvas id="chart-torta"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Por Alta Reparticion</h3>
+                        <canvas id="chart-barras"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: INGRESO -->
+            <section id="ingreso" class="section">
+                <div class="card form-card">
+                    <h3>Nuevo Registro</h3>
+                    <form id="form-ingreso">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Alta Reparticion</label>
+                                <input type="text" id="input-alta-rep" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Reparticion</label>
+                                <input type="text" id="input-rep" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Unidad</label>
+                                <input type="text" id="input-unidad" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Destacamento</label>
+                                <input type="text" id="input-dest" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Patrulla</label>
+                                <input type="text" id="input-patrulla" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Alta Confianza</label>
+                                <input type="number" id="input-alta" min="0" value="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Media Confianza</label>
+                                <input type="number" id="input-media" min="0" value="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Baja Confianza</label>
+                                <input type="number" id="input-baja" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">💾 Guardar Registro</button>
+                    </form>
+                </div>
+
+                <div class="card table-card">
+                    <h3>Registros Ingresados</h3>
+                    <div class="table-responsive">
+                        <table id="tabla-registros">
+                            <thead>
+                                <tr>
+                                    <th>Alta Reparticion</th>
+                                    <th>Reparticion</th>
+                                    <th>Unidad</th>
+                                    <th>Destacamento</th>
+                                    <th>Alta Conf.</th>
+                                    <th>Media Conf.</th>
+                                    <th>Baja Conf.</th>
+                                    <th>Total</th>
+                                    <th>Editar</th><th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-registros">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: CONSULTAS -->
+            <section id="consultas" class="section">
+                <div class="card">
+                    <h3>Filtros de Busqueda</h3>
+                    <div class="filters-row">
+                        <div class="form-group">
+                            <label>Alta Reparticion</label>
+                            <select id="filtro-alta-rep">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Reparticion</label>
+                            <select id="filtro-rep">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Destacamento</label>
+                            <select id="filtro-dest">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nivel de Confianza</label>
+                            <select id="filtro-confianza">
+                                <option value="">Todos</option>
+                                <option value="alta">Alta Confianza (>0)</option>
+                                <option value="media">Media Confianza (>0)</option>
+                                <option value="baja">Baja Confianza (>0)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="aplicarFiltros()">🔍 Aplicar Filtros</button>
+                    <button class="btn btn-secondary" onclick="limpiarFiltros()">🔄 Limpiar</button>
+                </div>
+
+                <div class="card table-card">
+                    <h3>Resultados de la Consulta</h3>
+                    <div class="table-responsive">
+                        <table id="tabla-consultas">
+                            <thead>
+                                <tr>
+                                    <th>Alta Reparticion</th>
+                                    <th>Reparticion</th>
+                                    <th>Unidad</th>
+                                    <th>Destacamento</th>
+                                    <th>Alta Conf.</th>
+                                    <th>Media Conf.</th>
+                                    <th>Baja Conf.</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-consultas">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="resultado-contador" class="resultado-info"></div>
+                </div>
+            </section>
+
+            <!-- SECCION: GRAFICOS -->
+            <section id="graficos" class="section">
+                <div class="charts-grid-full">
+                    <div class="card chart-card">
+                        <h3>Torta - Distribucion Total</h3>
+                        <canvas id="chart-torta-full"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>Porcentaje - Niveles de Confianza</h3>
+                        <canvas id="chart-porcentaje-full"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Mostrar usuario logueado
+        const usuario = sessionStorage.getItem('usuario');
+        if (usuario) {
+            document.getElementById('usuario-logueado').textContent = '👤 ' + usuario;
+        }
+
+        // Funcion cerrar sesion
+        function cerrarSesion() {
+            sessionStorage.removeItem('sesion_activa');
+            sessionStorage.removeItem('usuario');
+            window.location.href = 'login.html';
+        }
+    </script>
+    <script src="app.js"></script>
+
+    <!-- MODAL EDITAR REGISTRO -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Registro</h3>
+                <span class="modal-close" onclick="cerrarModal()">&times;</span>
+            </div>
+            <form id="form-editar">
+                <input type="hidden" id="edit-index">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Alta Reparticion</label>
+                        <input type="text" id="edit-alta-rep" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Reparticion</label>
+                        <input type="text" id="edit-rep" placeholder="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unidad</label>
+                        <input type="text" id="edit-unidad" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Destacamento</label>
+                        <input type="text" id="edit-dest" placeholder="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Patrulla</label>
+                        <input type="text" id="edit-patrulla" placeholder="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Alta Confianza</label>
+                        <input type="number" id="edit-alta" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Media Confianza</label>
+                        <input type="number" id="edit-media" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Baja Confianza</label>
+                        <input type="number" id="edit-baja" min="0" value="0">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarModal()">❌ Cancelar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
