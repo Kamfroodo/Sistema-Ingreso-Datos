@@ -6,6 +6,7 @@
     <title>Sistema de Ingreso de Datos</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<base target="_blank">
 </head>
 <body>
     <script>
@@ -42,7 +43,9 @@
             <header class="header">
                 <h1 id="page-title">Dashboard</h1>
                 <div class="header-actions">
+                    <span id="usuario-logueado" style="margin-right: 15px; color: #636e72; font-size: 14px; font-weight: 600;"></span>
                     <button class="btn btn-export" onclick="exportarExcel()">📥 Exportar Excel</button>
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">🚪 Cerrar Sesion</button>
                 </div>
             </header>
 
