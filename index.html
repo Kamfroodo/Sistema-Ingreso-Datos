@@ -6,6 +6,7 @@
     <title>Sistema de Ingreso de Datos</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <base target="_blank">
 </head>
 <body>
@@ -19,20 +20,21 @@
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="logo">
+                <i data-lucide="shield" style="width:24px;height:24px;stroke-width:2;flex-shrink:0;color:#3b82f6"></i>
                 <h2>INGRESO DE DATOS</h2>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item active" data-section="ingreso">
-                    <span class="icon">📝</span> Ingreso
+                    <span class="icon"><i data-lucide="file-plus"></i></span> Ingreso
                 </li>
                 <li class="nav-item" data-section="consultas">
-                    <span class="icon">🔍</span> Consultas
+                    <span class="icon"><i data-lucide="search"></i></span> Consultas
                 </li>
                 <li class="nav-item" data-section="dashboard">
-                    <span class="icon">📊</span> Dashboard
+                    <span class="icon"><i data-lucide="layout-dashboard"></i></span> Dashboard
                 </li>
                 <li class="nav-item" data-section="graficos">
-                    <span class="icon">📈</span> Graficos
+                    <span class="icon"><i data-lucide="chart-bar"></i></span> Graficos
                 </li>
             </ul>
         </nav>
@@ -44,8 +46,8 @@
                 <h1 id="page-title">Dashboard</h1>
                 <div class="header-actions">
                     <span id="usuario-logueado" style="margin-right: 15px; color: #636e72; font-size: 14px; font-weight: 600;"></span>
-                    <button class="btn btn-export" onclick="exportarExcel()">📥 Exportar Excel</button>
-                    <button class="btn btn-secondary" onclick="cerrarSesion()">🚪 Cerrar Sesion</button>
+                    <button class="btn btn-export" onclick="exportarExcel()"><i data-lucide="download" style="width:16px;height:16px"></i> Exportar Excel</button>
+                    <button class="btn btn-secondary" onclick="cerrarSesion()"><i data-lucide="log-out" style="width:16px;height:16px"></i> Cerrar Sesion</button>
                 </div>
             </header>
 
@@ -53,28 +55,28 @@
             <section id="dashboard" class="section active">
                 <div class="cards-grid">
                     <div class="card stat-card alta">
-                        <div class="stat-icon">🛡️</div>
+                        <div class="stat-icon"><i data-lucide="shield"></i></div>
                         <div class="stat-info">
                             <h3 id="total-alta">0</h3>
                             <p>Total Alta Confianza</p>
                         </div>
                     </div>
                     <div class="card stat-card media">
-                        <div class="stat-icon">⚡</div>
+                        <div class="stat-icon"><i data-lucide="zap"></i></div>
                         <div class="stat-info">
                             <h3 id="total-media">0</h3>
                             <p>Total Media Confianza</p>
                         </div>
                     </div>
                     <div class="card stat-card baja">
-                        <div class="stat-icon">🔒</div>
+                        <div class="stat-icon"><i data-lucide="lock"></i></div>
                         <div class="stat-info">
                             <h3 id="total-baja">0</h3>
                             <p>Total Baja Confianza</p>
                         </div>
                     </div>
                     <div class="card stat-card total">
-                        <div class="stat-icon">📋</div>
+                        <div class="stat-icon"><i data-lucide="clipboard-list"></i></div>
                         <div class="stat-info">
                             <h3 id="total-registros">0</h3>
                             <p>Total Registros</p>
@@ -139,7 +141,7 @@
                                 <input type="number" id="input-baja" min="0" value="0" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">💾 Guardar Registro</button>
+                        <button type="submit" class="btn btn-primary"><i data-lucide="save" style="width:16px;height:16px"></i> Guardar Registro</button>
                     </form>
                 </div>
 
@@ -200,8 +202,8 @@
                             </select>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="aplicarFiltros()">🔍 Aplicar Filtros</button>
-                    <button class="btn btn-secondary" onclick="limpiarFiltros()">🔄 Limpiar</button>
+                    <button class="btn btn-primary" onclick="aplicarFiltros()"><i data-lucide="search" style="width:16px;height:16px"></i> Aplicar Filtros</button>
+                    <button class="btn btn-secondary" onclick="limpiarFiltros()"><i data-lucide="rotate-ccw" style="width:16px;height:16px"></i> Limpiar</button>
                 </div>
 
                 <div class="card table-card">
@@ -248,7 +250,7 @@
         // Mostrar usuario logueado
         const usuario = sessionStorage.getItem('usuario');
         if (usuario) {
-            document.getElementById('usuario-logueado').textContent = '👤 ' + usuario;
+            document.getElementById('usuario-logueado').innerHTML = '<i data-lucide="user" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i> ' + usuario;
         }
 
         // Funcion cerrar sesion
@@ -258,6 +260,7 @@
             window.location.href = 'login.html';
         }
     </script>
+    <script>lucide.createIcons();</script>
     <script src="app.js"></script>
 
     <!-- MODAL EDITAR REGISTRO -->
@@ -265,7 +268,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Editar Registro</h3>
-                <span class="modal-close" onclick="cerrarModal()">&times;</span>
+                <span class="modal-close" onclick="cerrarModal()"><i data-lucide="x" style="width:20px;height:20px"></i></span>
             </div>
             <form id="form-editar">
                 <input type="hidden" id="edit-index">
@@ -309,8 +312,8 @@
                         <input type="number" id="edit-baja" min="0" value="0">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
-                <button type="button" class="btn btn-secondary" onclick="cerrarModal()">❌ Cancelar</button>
+                <button type="submit" class="btn btn-primary"><i data-lucide="save" style="width:16px;height:16px"></i> Guardar Cambios</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarModal()"><i data-lucide="x" style="width:16px;height:16px"></i> Cancelar</button>
             </form>
         </div>
     </div>

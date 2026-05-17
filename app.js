@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarDashboard();
     actualizarFiltros();
     renderGraficos();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 });
 
 // ============================================
@@ -131,11 +132,13 @@ function renderTabla(data = registros) {
             <td class="td-media">${reg.media}</td>
             <td class="td-baja">${reg.baja}</td>
             <td class="td-total">${total}</td>
-            <td><button class="btn btn-edit" onclick="abrirModalEditar(${index})">✏️ Editar</button></td>
-            <td><button class="btn btn-delete" onclick="eliminarRegistro(${index})">🗑️ Eliminar</button></td>
+            <td><button class="btn btn-edit" onclick="abrirModalEditar(${index})"><i data-lucide="pencil" style="width:12px;height:12px"></i> Editar</button></td>
+            <td><button class="btn btn-delete" onclick="eliminarRegistro(${index})"><i data-lucide="trash-2" style="width:12px;height:12px"></i> Eliminar</button></td>
         `;
         tbody.appendChild(tr);
     });
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function eliminarRegistro(index) {
